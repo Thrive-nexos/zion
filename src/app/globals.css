@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens (colours) are emitted as CSS variables by tailwind.config.ts. */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: #ffffff;
+    color: var(--color-body);
+    font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* Headlines: expanded, heavy, tight — poster type rather than a "luxury" serif. */
+  h1, h2, h3, .font-display {
+    font-family: var(--font-archivo), "Arial Black", system-ui, sans-serif;
+    font-stretch: 116%;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  h1 { font-weight: 900; }
+  /* Emphasis in headlines is a marker stroke, not a coloured italic. */
+  h1 em, h2 em, h3 em, .font-display em, .marker {
+    font-style: normal;
+    color: inherit;
+    background-image: linear-gradient(var(--marker, var(--color-gold)), var(--marker, var(--color-gold)));
+    background-repeat: no-repeat;
+    background-size: 100% 0.3em;
+    background-position: 0 88%;
+    padding-inline: 0.04em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  /* On yellow surfaces the marker switches to pink so it stays visible. */
+  .bg-gold h1 em, .bg-gold h2 em, .bg-gold .font-display em { --marker: var(--color-pink); }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-iris);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  [data-theme-dark] :focus-visible {
+    outline-color: var(--color-gold);
+  }
+  button, [role="button"], summary {
+    cursor: pointer;
+  }
+  /* Layout guards: grid tracks and truncated flex items must be allowed to shrink,
+     otherwise one long label blows out a whole column on a phone. */
+  .grid > * {
+    min-width: 0;
+  }
+  .truncate {
+    min-width: 0;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer utilities {
+  /* Graph-paper grid used on a few hero surfaces — a nod to exercise books. */
+  .grid-paper {
+    background-image:
+      linear-gradient(rgb(17 17 17 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(17 17 17 / 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .grid-paper-dark {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+/* Tour highlight: the element the guided walkthrough is pointing at. */
+[data-tour-active="true"] {
+  position: relative;
+  z-index: 1;
+  animation: pulse-ring 1.6s ease-out infinite;
+  outline: 3px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+/* Reduced motion: honour the OS setting and the in-app toggle. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+dialog::backdrop {
+  background: rgb(17 17 17 / 0.6);
+}
+dialog[open] {
+  animation: rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
